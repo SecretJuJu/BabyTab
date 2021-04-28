@@ -8,10 +8,12 @@
     "scripts": ["src/js/background.js"],
     "persistent": false
   },
+  "options_page": "src/html/detail.html",
   "browser_action": {
-    "default_popup": "src/html/index.html"
+    "default_popup": "src/html/popUp.html"
   },
   "permissions": [
+    "storage",
     "tabs"
   ],
 
