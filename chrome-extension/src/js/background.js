@@ -146,12 +146,13 @@ const setToRecentSet = async (winId,cb) => {
 
     recentSet?.status?.forEach(status =>{
         chrome.windows.create((win) => {
-            chrome.windows.update(win.id,status.option)
-            status.urls.forEach(url => {
-                chrome.tabs.create({
-                    url: url,
-                    windowId : win.id
-                });
+            chrome.windows.update(win.id,status.option,(updatedWindow)=>{
+                status.urls.forEach(url => {
+                    chrome.tabs.create({
+                        url: url,
+                        windowId : updatedWindow.id
+                    });
+                })
             })
         })
     })
