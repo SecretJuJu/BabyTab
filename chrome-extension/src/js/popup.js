@@ -19,6 +19,7 @@ const changeText = (element,text) => {
 }
 let port = chrome.runtime.connect({name: "messaging"});
 
+const setRecentSetBtn = document.getElementById('setRecentSetBtn')
 const saveStatusBtn = document.getElementById('saveStatusBtn');
 const goToTheDetailBtn = document.getElementById("goToTheDetailBtn")
 
@@ -28,11 +29,16 @@ const saveTabs = () =>{
   disableBtn(saveStatusBtn)
   changeText(saveStatusBtn,"saving..")
   port.postMessage({task: "save"});
+}
 
+const setRecentSet = () => {
+  disableBtn(setRecentSetBtn)
+  port.postMessage({task: "getRecentSet"});
 }
 
 document.addEventListener('DOMContentLoaded', function () {
   
+  setRecentSetBtn.addEventListener('click', setRecentSet);
   goToTheDetailBtn.addEventListener('click', openOptionPage);
   saveStatusBtn.addEventListener('click', saveTabs)
 });
@@ -53,6 +59,9 @@ port.onMessage.addListener( async (response) => {
 
   else if (response?.task == "getRecentSet"){
     console.log(response)
+    setTimeout(() => {
+      toggleBtn(setRecentSetBtn)
+    },1000)
   }
 });
 

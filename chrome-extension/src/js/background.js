@@ -1,3 +1,5 @@
+'ues strict'
+
 const pluck = (arrayOfObject, property) => new Promise(resolve => {
     resolve(
         arrayOfObject.map(function (item) {
@@ -42,7 +44,7 @@ const resolveCurrentStatus = (o) => new Promise(resolve => {
     })    
 })
 
-const urlSave = async (cb) => {
+const saveUrl = async (cb) => {
     resolveCurrentStatus({populate:true})
     .then(async urlStatus => { // result: status
         // console.log(urlStatus)
@@ -56,12 +58,12 @@ const urlSave = async (cb) => {
     })
 }
 
-const getAllKeysFromStorage = () => {
-    chrome.storage.sync.get(null, function(items) {
-        var allKeys = Object.keys(items);
-        return allKeys
-    });
-}
+
+const getAllFromStorage = () => new Promise(resolve =>{
+    chrome.storage.local.get(null, function(items) {
+        resolve(items);
+    })
+})
 
 const getFromStorage = (key) => {
     chrome.storage.local.get([key], function(result) {
@@ -70,6 +72,7 @@ const getFromStorage = (key) => {
 }
 
 const saveToStorage = (key,data) => new Promise ( resolve => {
+    console.log("key : ",key)
     try { 
         chrome.storage.local.set({[key]: data}, () => {
             resolve(true)
@@ -79,6 +82,27 @@ const saveToStorage = (key,data) => new Promise ( resolve => {
     }
 })
 
+const getRecentSet = async (cb) => {
+    const data = await getAllFromStorage() // list
+    if (data === null) {
+        cb(false)
+        return
+    }
+    let keys = Object.keys(data)
+    let times = []
+    keys.forEach( e => {
+        let tmp = e.split('_')
+        if (tmp[0] === "urlStatus"){
+            times.push(parseInt(tmp[1]))
+        }
+    })
+
+    let currentKey = "urlStatus_"+Math.max(...times) // ES6
+    console.log("currentKey : ", currentKey)
+    console.log("current data : ",data[currentKey])
+    cb(true)
+}
+
 const response = (port,result, task, data) => {
     port.postMessage({result,task,data})
 }
@@ -87,7 +111,7 @@ const msgController = async (port) => {
     console.assert(port.name == "messaging");
     port.onMessage.addListener(async (msg) => {
         if (msg.task === "save") {
-            urlSave((result) => {
+            saveUrl((result) => {
                 response(port,result,msg.task)
             })
         }
