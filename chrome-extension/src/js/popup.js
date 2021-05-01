@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 port.onMessage.addListener( async (response) => {
   console.log("response : ",response);
-  if (response?.task == "saveResponse"){
+  if (response?.task === "save"){
     if (response.result) {
       changeText(saveStatusBtn,"complete!")
     } else {
@@ -51,6 +51,8 @@ port.onMessage.addListener( async (response) => {
     },1000)
   }
 
-  else if (response?.question == "Madame who?")
-    port.postMessage({answer: "Madame... Bovary"});
+  else if (response?.task == "getRecentSet"){
+    console.log(response)
+  }
 });
+
