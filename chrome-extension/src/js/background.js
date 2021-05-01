@@ -20,21 +20,39 @@ const getUrls = (id) => new Promise( resolve => {
     }))
 })
 
-const getUrlStatus = (ids) => new Promise(resolve => {
-    let urlStatus = []
+const getOptions = (id) => new Promise( resolve => {
+    chrome.windows.get(id,(win)=>{
+        let options = {
+            alwaysOnTop : win.alwaysOnTop,
+            height : win.height,
+            incognito : win.incognito,
+            left : win.left,
+            state : win.state,
+            top : win.top,
+            type : win.type,
+            width : win.width
+        }
+        resolve(options)
+    })
+})
+
+
+const getStatus = (ids) => new Promise(resolve => {
+    let status = []
     ids.forEach(async (id,index,array) => {
         let urls = await getUrls(id)
-        urlStatus.push(urls)
+        let options = await getOptions(id)
+        status.push({urls,options})
         if ( index === array.length - 1 ) {
-            resolve(urlStatus)
+            resolve(status)
         }
     })
 })
 
 const getCurrentStatus = async (windows) => {
     let ids = await getIds(windows)
-    let urlStatus = await getUrlStatus(ids)
-    return urlStatus
+    let status = await getStatus(ids)
+    return status
 }
 
 const getWindows = (o) => new Promise(resolve => {
@@ -59,12 +77,12 @@ const resolveCurrentStatus = () => new Promise(resolve => {
 
 const saveUrl = async (cb) => {
     resolveCurrentStatus()
-    .then(async urlStatus => { // result: status
+    .then(async status => { // result: status
         // console.log(urlStatus)
-        if (urlStatus.result) {
+        if (status.result) {
             // new Date() is a key of current url status
-            let keyname = "urlStatus_" + new Date().valueOf()
-            let result = await saveToStorage(keyname,{urlStatus : urlStatus.currenStatus})
+            let keyname = "status_" + new Date().valueOf()
+            let result = await saveToStorage(keyname,{status : status.currenStatus})
             cb(result)
         }
     })
@@ -84,7 +102,6 @@ const getFromStorage = (key) => {
 }
 
 const saveToStorage = (key,data) => new Promise ( resolve => {
-    console.log("key : ",key)
     try { 
         chrome.storage.local.set({[key]: data}, () => {
             resolve(true)
@@ -104,12 +121,12 @@ const getRecentSet = async () => {
     let times = []
     keys.forEach( e => {
         let tmp = e.split('_')
-        if (tmp[0] === "urlStatus"){
+        if (tmp[0] === "status"){
             times.push(parseInt(tmp[1]))
         }
     })
 
-    let currentKey = "urlStatus_"+Math.max(...times) // ES6
+    let currentKey = "status_"+Math.max(...times) // ES6
     return data[currentKey]
 }
 
@@ -119,15 +136,18 @@ const setToRecentSet = async (winId,cb) => {
     const windows = await getWindows()
     const ids = await getIds(windows)
     ids.slice(winId,1)
+
+    console.log(recentSet.status)
     ids.forEach(id => {
         console.log("have to remove : ",id)
         chrome.windows.remove(id);
     })
     
-    recentSet?.urlStatus?.forEach(urls =>{
-        
+
+    recentSet?.status?.forEach(status =>{
         chrome.windows.create((win) => {
-            urls.forEach(url => {
+            chrome.windows.update(win.id,status.option)
+            status.urls.forEach(url => {
                 chrome.tabs.create({
                     url: url,
                     windowId : win.id
@@ -139,7 +159,7 @@ const setToRecentSet = async (winId,cb) => {
 }
 
 const response = (port,result, task, data) => {
-    port.postMessage({result,task,data,port})
+    port.postMessage({result,task,data})
 }
 
 const msgController = async (port) => {
