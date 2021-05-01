@@ -23,7 +23,6 @@ const getUrls = (id) => new Promise( resolve => {
 const getOptions = (id) => new Promise( resolve => {
     chrome.windows.get(id,(win)=>{
         let options = {
-            alwaysOnTop : win.alwaysOnTop,
             height : win.height,
             incognito : win.incognito,
             left : win.left,
@@ -136,23 +135,20 @@ const setToRecentSet = async (winId,cb) => {
     const windows = await getWindows()
     const ids = await getIds(windows)
     ids.slice(winId,1)
-
-    console.log(recentSet.status)
-    ids.forEach(id => {
-        console.log("have to remove : ",id)
-        chrome.windows.remove(id);
-    })
+    
+    // ids.forEach(id => {
+    //     console.log("have to remove : ",id)
+    //     chrome.windows.remove(id);
+    // })
     
 
     recentSet?.status?.forEach(status =>{
-        chrome.windows.create((win) => {
-            chrome.windows.update(win.id,status.option,(updatedWindow)=>{
-                status.urls.forEach(url => {
-                    chrome.tabs.create({
-                        url: url,
-                        windowId : updatedWindow.id
-                    });
-                })
+        chrome.windows.create(status.options,(win) => {
+            status.urls.forEach(url => {
+                chrome.tabs.create({
+                    url: url,
+                    windowId : win.id
+                });
             })
         })
     })
