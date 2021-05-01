@@ -33,7 +33,9 @@ const saveTabs = () =>{
 
 const setRecentSet = () => {
   disableBtn(setRecentSetBtn)
-  port.postMessage({task: "getRecentSet"});
+  chrome.windows.getCurrent(function (win) {
+    port.postMessage({task: "getRecentSet",winId:win.id});
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function () {

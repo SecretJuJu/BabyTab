@@ -8,7 +8,7 @@ const pluck = (arrayOfObject, property) => new Promise(resolve => {
     )
 })
 
-async function getIds (windows) {
+const getIds = async (windows) => {
     let ids = await pluck(windows,'id')
     return ids
 }
@@ -37,22 +37,34 @@ const getCurrentStatus = async (windows) => {
     return urlStatus
 }
 
-const resolveCurrentStatus = (o) => new Promise(resolve => {
+const getWindows = (o) => new Promise(resolve => {
     chrome.windows.getAll(o, async (windows) => {
+        resolve(windows)
+    })
+})
+
+const getCurrentWindow = () => new Promise(resolve => {
+    chrome.windows.getCurrent(function(w) {
+        resolve(w.id)
+    });
+})
+
+const resolveCurrentStatus = () => new Promise(resolve => {
+    getWindows({populate:true})
+    .then(async windows => {
         const currenStatus = await getCurrentStatus(windows)
         resolve({currenStatus,result:true})
-    })    
+    })
 })
 
 const saveUrl = async (cb) => {
-    resolveCurrentStatus({populate:true})
+    resolveCurrentStatus()
     .then(async urlStatus => { // result: status
         // console.log(urlStatus)
         if (urlStatus.result) {
             // new Date() is a key of current url status
             let keyname = "urlStatus_" + new Date().valueOf()
             let result = await saveToStorage(keyname,{urlStatus : urlStatus.currenStatus})
-            console.log("result : ",result)
             cb(result)
         }
     })
@@ -82,7 +94,7 @@ const saveToStorage = (key,data) => new Promise ( resolve => {
     }
 })
 
-const getRecentSet = async (cb) => {
+const getRecentSet = async () => {
     const data = await getAllFromStorage() // list
     if (data === null) {
         cb(false)
@@ -98,13 +110,36 @@ const getRecentSet = async (cb) => {
     })
 
     let currentKey = "urlStatus_"+Math.max(...times) // ES6
-    console.log("currentKey : ", currentKey)
-    console.log("current data : ",data[currentKey])
+    return data[currentKey]
+}
+
+const setToRecentSet = async (winId,cb) => {
+    // close windows without current window
+    const recentSet = await getRecentSet()
+    const windows = await getWindows()
+    const ids = await getIds(windows)
+    ids.slice(winId,1)
+    ids.forEach(id => {
+        console.log("have to remove : ",id)
+        chrome.windows.remove(id);
+    })
+    
+    recentSet?.urlStatus?.forEach(urls =>{
+        
+        chrome.windows.create((win) => {
+            urls.forEach(url => {
+                chrome.tabs.create({
+                    url: url,
+                    windowId : win.id
+                });
+            })
+        })
+    })
     cb(true)
 }
 
 const response = (port,result, task, data) => {
-    port.postMessage({result,task,data})
+    port.postMessage({result,task,data,port})
 }
 
 const msgController = async (port) => {
@@ -117,7 +152,7 @@ const msgController = async (port) => {
         }
 
         if(msg.task === "getRecentSet") {
-            getRecentSet(data => {
+            setToRecentSet(msg.winId,data => {
                 response(port,true,msg.task,data)
             })
         }
