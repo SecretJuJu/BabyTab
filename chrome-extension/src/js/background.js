@@ -87,7 +87,6 @@ const saveUrl = async (cb) => {
     })
 }
 
-
 const getAllFromStorage = () => new Promise(resolve =>{
     chrome.storage.local.get(null, function(items) {
         resolve(items);
@@ -128,7 +127,9 @@ const getRecentSet = async () => {
     let currentKey = "status_"+Math.max(...times) // ES6
     return data[currentKey]
 }
-
+const createTab = (options) => {
+    chrome.tabs.create(options)
+}
 const setToRecentSet = async (winId,cb) => {
     // close windows without current window
     const recentSet = await getRecentSet()
@@ -136,20 +137,18 @@ const setToRecentSet = async (winId,cb) => {
     const ids = await getIds(windows)
     ids.slice(winId,1)
     
-    // ids.forEach(id => {
-    //     console.log("have to remove : ",id)
-    //     chrome.windows.remove(id);
-    // })
+    ids.forEach(id => {
+        chrome.windows.remove(id);
+    })
     
 
     recentSet?.status?.forEach(status =>{
+        // open first url when the window created
+        Object.assign(status.options,{url : status.urls[0]})
         chrome.windows.create(status.options,(win) => {
-            status.urls.forEach(url => {
-                chrome.tabs.create({
-                    url: url,
-                    windowId : win.id
-                });
-            })
+            for (let i=1; i < status.urls.length; i++) {
+                createTab({url:status.urls[i], windowId:win.id})
+            }
         })
     })
     cb(true)
