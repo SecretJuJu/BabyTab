@@ -24,11 +24,16 @@ const saveStatusBtn = document.getElementById('saveStatusBtn');
 const goToTheDetailBtn = document.getElementById("goToTheDetailBtn")
 
 const saveTabs = () =>{
-  console.log("save tabs")
+  let statusName
+  do {
+    statusName = prompt('Name of this status :)', new Date()); 
+    alert(statusName);
+  } while (statusName === null)
+    
   const saveStatusBtn = document.getElementById('saveStatusBtn');
   disableBtn(saveStatusBtn)
   changeText(saveStatusBtn,"saving..")
-  port.postMessage({task: "save"});
+  port.postMessage({task: "save",name:statusName});
 }
 
 const setRecentSet = () => {
@@ -39,7 +44,6 @@ const setRecentSet = () => {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  
   setRecentSetBtn.addEventListener('click', setRecentSet);
   goToTheDetailBtn.addEventListener('click', openOptionPage);
   saveStatusBtn.addEventListener('click', saveTabs)
