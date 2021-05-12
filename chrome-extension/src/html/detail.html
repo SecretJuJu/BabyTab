@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'sha256-GNBWeCZmsCBAaCxV3Lh+hG4p/JD6dTxAiJrZmSccP9g='">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/detail.css">
+    <script src="../js/detail.js"></script>
     <title>detail</title>
 </head>
 <body>
@@ -17,42 +19,221 @@
             </h1>
                 
             <div class="menu">
-                <button onclick="login()">
+                <button id="loginBtn">
                     login
                 </button>
             </div>
         </div>
     </div>
+    <div class="modal">
+        
+    </div>
+    <div class="login">
+        <div>
+            <button>google login</button>
+        </div>
+    </div>
     <div class="content">
-        <div class="sets">
+        <div class="sets" id='setList'>
             <ul>
                 <li>
                     <div class="wrapper">
-                        <div class="topSide">
-                            <div class="left">
-                                <h2 class="name">
-                                    example
-                                </h2>
+                        <div class="summary">
+                            <div class="topSide">
+                                <div class="left">
+                                    <h2 class="name">
+                                        example
+                                    </h2>
+                                </div>
+                                <div class="right">
+                                    <!-- info -->
+                                    <span class="tabCount">
+                                        tab count : <strong> 22 </strong>
+                                    </span>
+                                    <span class="windows">
+                                        window count : <strong> 3 </strong>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="right">
-                                <!-- info -->
-                                <span class="tabCount">
-                                    tab count : <strong> 22 </strong>
-                                </span>
-                                <span class="windows">
-                                    window count : <strong> 3 </strong>
+                            <div class="underSide">
+                                <span>
+                                    created at : <strong>2021-4-4</strong>
                                 </span>
                             </div>
                         </div>
-                        <div class="underSide">
-                            <span>
-                                created at : <strong>2021-4-4</strong>
-                            </span>
+                        <div class="detailInfo">
+                            <div class="left">
+                                <div class="infos">
+                                    <div class="title">
+                                        <h1>
+                                            example
+                                        </h1>
+                                    </div>
+                                    <div class="tabCount">
+                                        Tab count : <strong>22</strong>
+                                    </div>
+                                    <div class="windowCount">
+                                        Window count : <strong>10</strong>
+                                    </div>
+                                    <div class="createdAt">
+                                        createdAt <br> <strong>2020-04-04</strong>
+                                    </div>
+                                </div>
+                                <div class="buttons">
+                                    <div class="load">
+                                        <button>Load</button>
+                                    </div>
+                                    <div class="delete">
+                                        <button>Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="wrapper">
+                                    <ul class="windows">
+                                        <li>
+                                            <h2>
+                                                window1
+                                            </h2>
+                                            <p class="options">
+                                                <strong>height</strong>: 1025 <br>
+                                                <strong>incognito</strong>: false <br>
+                                                <strong>left</strong>: 0 <br>
+                                                <strong>state</strong>: "normal" <br>
+                                                <strong>top</strong>: 25 <br>
+                                                <strong>type</strong>: "normal" <br>
+                                                <strong>width</strong>: 1680
+                                            </p>
+                                            <ul class="tabs">
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com?biusghfiuedfouhawoiudfasijwiojfioawehjfiohieofhwoihfiowhefiohweiofhwoifhw=adasd
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <h2>
+                                                window1
+                                            </h2>
+                                            <p class="options">
+                                                <strong>height</strong>: 1025 <br>
+                                                <strong>incognito</strong>: false <br>
+                                                <strong>left</strong>: 0 <br>
+                                                <strong>state</strong>: "normal" <br>
+                                                <strong>top</strong>: 25 <br>
+                                                <strong>type</strong>: "normal" <br>
+                                                <strong>width</strong>: 1680
+                                            </p>
+                                            <ul class="tabs">
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com?biusghfiuedfouhawoiudfasijwiojfioawehjfiohieofhwoihfiowhefiohweiofhwoifhw=adasd
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://naver.com">
+                                                    https://naver.com
+                                                    </a>
+                                                </li>
+                                                
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
+    
 </body>
 </html>

@@ -19,7 +19,7 @@ const changeText = (element,text) => {
 }
 let port = chrome.runtime.connect({name: "messaging"});
 
-const setRecentSetBtn = document.getElementById('setRecentSetBtn')
+const setToRecentSetBtn = document.getElementById('setToRecentSetBtn')
 const saveStatusBtn = document.getElementById('saveStatusBtn');
 const goToTheDetailBtn = document.getElementById("goToTheDetailBtn")
 
@@ -36,15 +36,15 @@ const saveTabs = () =>{
   port.postMessage({task: "save",name:statusName});
 }
 
-const setRecentSet = () => {
-  disableBtn(setRecentSetBtn)
+const setToRecentSet = () => {
+  disableBtn(setToRecentSetBtn)
   chrome.windows.getCurrent(function (win) {
-    port.postMessage({task: "getRecentSet",winId:win.id});
+    port.postMessage({task: "setToRecentSet",winId:win.id});
   });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  setRecentSetBtn.addEventListener('click', setRecentSet);
+  setToRecentSetBtn.addEventListener('click', setToRecentSet);
   goToTheDetailBtn.addEventListener('click', openOptionPage);
   saveStatusBtn.addEventListener('click', saveTabs)
 });
@@ -63,10 +63,10 @@ port.onMessage.addListener( async (response) => {
     },1000)
   }
 
-  else if (response?.task == "getRecentSet"){
+  else if (response?.task == "setToRecentSet"){
     console.log(response)
     setTimeout(() => {
-      toggleBtn(setRecentSetBtn)
+      toggleBtn(setToRecentSetBtn)
     },1000)
   }
 });

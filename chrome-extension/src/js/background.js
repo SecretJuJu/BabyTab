@@ -110,8 +110,25 @@ const saveStatus = async (statusName,cb) => {
     cb(result)
 }
 
-const getRecentSet = async () => {
+const getAllStatus = async () => {
     const data = await ChromeApis.getAllFromStorage() // list
+    if (data === null) {
+        cb(false)
+        return
+    }
+    let keys = Object.keys(data)
+    keys.forEach( e => {
+        let tmp = e.split('_')
+        if (tmp[0] !== "status"){
+            delete data[e]
+        }
+    })
+
+    return data
+}
+
+const getRecentSet = async () => {
+    const data = await getAllStatus() // list
     if (data === null) {
         cb(false)
         return
@@ -120,9 +137,7 @@ const getRecentSet = async () => {
     let times = []
     keys.forEach( e => {
         let tmp = e.split('_')
-        if (tmp[0] === "status"){
-            times.push(parseInt(tmp[1]))
-        }
+        times.push(parseInt(tmp[1]))
     })
 
     let currentKey = "status_"+Math.max(...times) // ES6
@@ -139,6 +154,7 @@ const setToRecentSet = async (winId,cb) => {
     ids.forEach(id => {
         chrome.windows.remove(id);
     })
+    console.log(recentSet)
     recentSet?.status?.forEach(status =>{
         // open first url when the window created
         Object.assign(status.options,{url : status.urls[0]})
@@ -164,10 +180,15 @@ const msgController = async (port) => {
             })
         }
 
-        if(msg.task === "getRecentSet") {
+        if(msg.task === "setToRecentSet") {
             setToRecentSet(msg.winId,data => {
                 response(port,true,msg.task,data)
             })
+        }
+
+        if(msg.task === "getStatusList") {
+            const statusList = await getAllStatus()
+            response(port,true,msg.task,statusList)
         }
     })
 }
