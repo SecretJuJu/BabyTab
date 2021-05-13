@@ -1,11 +1,12 @@
 
 window.onload = function(){
+    
     let port = chrome.runtime.connect({name: "messaging"});
     let statusList
     let modal = document.querySelector(".modal")
     let loginForm = document.querySelector(".login")
     let loginBtn = document.querySelector("#loginBtn")
-    
+    let deteletAllBtn = document.getElementById("deteletAllBtn")
     const modalHandler = () => {
         modal.style.display = "none"
         loginForm.style.display = "none"
@@ -20,6 +21,10 @@ window.onload = function(){
     
     const requestGetStatusList = () => {
         port.postMessage({task: "getStatusList"});
+    }
+    const requestDeleteAll = () => {
+        port.postMessage({task: "deleteAll"});
+
     }
     const getStatus = (id) => {
 
@@ -115,7 +120,9 @@ window.onload = function(){
         }
     }
     
+    
     modal.addEventListener("click", ()=>modalHandler())
+    deteletAllBtn.addEventListener("click", ()=> requestDeleteAll())
     loginBtn.addEventListener("click",()=>loginBtnHandler())
     requestGetStatusList()
     port.onMessage.addListener( async (response) => {
@@ -123,6 +130,10 @@ window.onload = function(){
         if (response?.task === "getStatusList"){
             statusList = response.data
             displayedStatusList();
+        } else if (response?.task === "deleteAll"){
+            if (response.result) {
+                alert("deleted!")
+            } 
         }
     });
 }

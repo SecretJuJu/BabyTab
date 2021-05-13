@@ -212,4 +212,5 @@ body {
     overflow: scroll;
     max-width: 30%;
     border-right: 2px solid #fff; 
+    padding-left: 20px;
 }

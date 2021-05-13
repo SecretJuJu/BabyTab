@@ -22,17 +22,24 @@ let port = chrome.runtime.connect({name: "messaging"});
 const setToRecentSetBtn = document.getElementById('setToRecentSetBtn')
 const saveStatusBtn = document.getElementById('saveStatusBtn');
 const goToTheDetailBtn = document.getElementById("goToTheDetailBtn")
+const testBtn = document.getElementById('testBtn');
+const getInput = (msg,defaultValue) => {
+  let output = prompt(msg,defaultValue)
+  return output
+}
 
-const saveTabs = () =>{
-  let statusName
-  do {
-    statusName = prompt('Name of this status :)', new Date()); 
-    alert(statusName);
-  } while (statusName === null)
-    
+const saveStatus = async () =>{
+  let statusName = await getInput('Name of this status :)', new Date())
+  if (!statusName) {
+    statusName = new Date()
+  }
   const saveStatusBtn = document.getElementById('saveStatusBtn');
   disableBtn(saveStatusBtn)
   changeText(saveStatusBtn,"saving..")
+  sendSaveRequest(statusName)
+}
+
+const sendSaveRequest = (statusName) => {
   port.postMessage({task: "save",name:statusName});
 }
 
@@ -46,7 +53,10 @@ const setToRecentSet = () => {
 document.addEventListener('DOMContentLoaded', function () {
   setToRecentSetBtn.addEventListener('click', setToRecentSet);
   goToTheDetailBtn.addEventListener('click', openOptionPage);
-  saveStatusBtn.addEventListener('click', saveTabs)
+  saveStatusBtn.addEventListener('click', saveStatus)
+  testBtn.addEventListener('click', ()=>{
+    alert("testalert")
+  })
 });
 
 port.onMessage.addListener( async (response) => {

@@ -31,11 +31,22 @@ class ChromeApis {
     static saveToStorage = (key,data) => new Promise ( resolve => {
         try { 
             chrome.storage.local.set({[key]: data}, () => {
+                console.log("key",key);
+                console.log("data",data);
                 resolve(true)
             });
         } catch (err) {
             resolve(false)
         }
+    })
+    static removeAllLocal = () => new Promise( resolve => {
+        chrome.storage.local.clear(function() {
+            var error = chrome.runtime.lastError;
+            if (error) {
+                console.error(error);
+            }
+            resolve(true)
+        });
     })
     static createTab = (options) => {
         chrome.tabs.create(options)
@@ -45,6 +56,7 @@ class ChromeApis {
             cb(win)
         })
     }
+    
 }
 class Save {
     static getUrls = (id) => new Promise( resolve => {
@@ -99,19 +111,20 @@ const getCurrentStatus = () => new Promise(resolve => {
     })
 })
 
-const saveStatus = async (statusName,cb) => {
+const saveStatus = async (statusName) => {
     const windows = await ChromeApis.getWindows({populate:true})
     const currentStatus = await Save.getCurrentStatus(windows)
 
     let keyname = "status_" + new Date().valueOf()
     
     let result = await ChromeApis.saveToStorage(keyname,{name:statusName,status : currentStatus})
-
-    cb(result)
+    return result
 }
 
 const getAllStatus = async () => {
     const data = await ChromeApis.getAllFromStorage() // list
+    console.log(data)
+    // console.log("Data : ",data)
     if (data === null) {
         cb(false)
         return
@@ -123,7 +136,6 @@ const getAllStatus = async () => {
             delete data[e]
         }
     })
-
     return data
 }
 
@@ -147,6 +159,11 @@ const getRecentSet = async () => {
 const setToRecentSet = async (winId,cb) => {
     // close windows without current window
     const recentSet = await getRecentSet()
+    console.log("recent set : " + recentSet)
+    if (!recentSet) {
+        cb(false)
+        return
+    }
     const windows = await ChromeApis.getWindows()
     const ids = await pluck(windows,'id')
     ids.slice(winId,1)
@@ -164,10 +181,12 @@ const setToRecentSet = async (winId,cb) => {
             }
         })
     })
-    cb(true)
+    
+    return true
 }
 
 const response = (port,result, task, data) => {
+    console.log("response")
     port.postMessage({result,task,data})
 }
 
@@ -175,22 +194,26 @@ const msgController = async (port) => {
     console.assert(port.name == "messaging");
     port.onMessage.addListener(async (msg) => {
         if (msg.task === "save") {
-            saveStatus(msg.statusName,(result) => {
-                response(port,result,msg.task)
-            })
+            const result = await saveStatus(msg.name)
+            response(port,result,msg.task)
         }
 
         if(msg.task === "setToRecentSet") {
-            setToRecentSet(msg.winId,data => {
-                response(port,true,msg.task,data)
-            })
+            const result = await setToRecentSet(msg,winId)
+            response(port,result,msg.task)
         }
 
         if(msg.task === "getStatusList") {
             const statusList = await getAllStatus()
             response(port,true,msg.task,statusList)
         }
+
+        if(msg.task === "deleteAll") {
+            console.log("delete all")
+            const result = await ChromeApis.removeAllLocal()
+            response(port,result,msg.task)
+        }
     })
 }
 
-chrome.runtime.onConnect.addListener(msgController);
+chrome.runtime.onConnect.addListener(msgController)
