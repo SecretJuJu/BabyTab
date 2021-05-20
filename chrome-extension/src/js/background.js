@@ -117,7 +117,7 @@ const saveStatus = async (statusName) => {
 
     let keyname = "status_" + new Date().valueOf()
     
-    let result = await ChromeApis.saveToStorage(keyname,{name:statusName,status : currentStatus})
+    let result = await ChromeApis.saveToStorage(keyname,{name:statusName,status : currentStatus, createdAt:new Date()})
     return result
 }
 
