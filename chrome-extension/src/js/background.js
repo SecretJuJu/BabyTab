@@ -48,6 +48,9 @@ class ChromeApis {
             resolve(true)
         });
     })
+    static removeOneLocal = (target) => new Promise( resolve => {
+        
+    })
     static createTab = (options) => {
         chrome.tabs.create(options)
     }
@@ -216,6 +219,10 @@ const msgController = async (port) => {
             console.log("delete all")
             const result = await ChromeApis.removeAllLocal()
             response(port,result,msg.task)
+        }
+
+        if (msg.task === "delete") {
+            console.log(msg)
         }
     })
 }

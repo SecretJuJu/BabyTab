@@ -15,8 +15,14 @@ window.onload = function(){
         modal.style.display = "flex"
         loginForm.style.display = "flex"
     }
-    const toggleShowStatus = () => {
+    const toggleDisplayDetail = (wrapper) => {
         // toggle detail info 
+        const detailInfo = wrapper.querySelector(".detailInfo")
+        if (detailInfo.style.display === "none") {
+            detailInfo.style.display = "flex"
+        } else {
+            detailInfo.style.display = "none"
+        }
     }
     
     const requestGetStatusList = () => {
@@ -24,11 +30,8 @@ window.onload = function(){
     }
     const requestDeleteAll = () => {
         port.postMessage({task: "deleteAll"});
-
     }
-    const getStatus = (id) => {
-
-    }
+    
 
     const makeElement = (tagName,classNames='') => {
         const newElement = document.createElement(tagName)
@@ -116,6 +119,21 @@ window.onload = function(){
                     </div>
                 </div>
             `
+            const summary = wrapper.querySelector('.summary')
+            const deleteBtn = wrapper.querySelector('.buttons .delete button')
+            summary.onclick = (e) => {
+                let wrapper = e.target
+                if(wrapper.className !== "wrapper"){
+                    do {
+                        wrapper = wrapper.parentNode
+                    }
+                    while (wrapper.className !== "wrapper")
+                }
+                toggleDisplayDetail(wrapper)
+            }
+            deleteBtn.onclick = () => {
+                port.postMessage({task: "delete",target: keys[i]});
+            }
             let windowUl = wrapper.querySelector('.right .wrapper .windows')
             console.log(windowUl)
             for (let i=0; i < status.status.length; i++){
@@ -162,7 +180,11 @@ window.onload = function(){
         if (response?.task === "getStatusList"){
             statusList = response.data
             displayedStatusList();
-        } else if (response?.task === "deleteAll"){
+        } else if (response?.task === "deleteAll") {
+            if (response.result) {
+                alert("deleted!")
+            } 
+        } else if (response?.task === "delete") {
             if (response.result) {
                 alert("deleted!")
             } 
