@@ -114,10 +114,14 @@ const getCurrentStatus = () => new Promise(resolve => {
 const saveStatus = async (statusName) => {
     const windows = await ChromeApis.getWindows({populate:true})
     const currentStatus = await Save.getCurrentStatus(windows)
-
-    let keyname = "status_" + new Date().valueOf()
+    const date = new Date()
+    let keyname = "status_" + date.valueOf()
     
-    let result = await ChromeApis.saveToStorage(keyname,{name:statusName,status : currentStatus, createdAt:new Date()})
+    let result = await ChromeApis.saveToStorage(keyname,{
+        name:statusName,
+        status : currentStatus,
+        createdAt: date.toString()
+    })
     return result
 }
 

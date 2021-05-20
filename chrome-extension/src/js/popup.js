@@ -17,22 +17,22 @@ const disableBtn = (element) => {
 const changeText = (element,text) => {
   element.innerText = text
 }
-let port = chrome.runtime.connect({name: "messaging"});
 
+let port = chrome.runtime.connect({name: "messaging"});
 const setToRecentSetBtn = document.getElementById('setToRecentSetBtn')
 const saveStatusBtn = document.getElementById('saveStatusBtn');
 const goToTheDetailBtn = document.getElementById("goToTheDetailBtn")
 const testBtn = document.getElementById('testBtn');
+
+// const getInput = document.getELement('getInput');
+
 const getInput = (msg,defaultValue) => {
   let output = prompt(msg,defaultValue)
   return output
 }
 
 const saveStatus = async () =>{
-  let statusName = await getInput('Name of this status :)', new Date())
-  if (!statusName) {
-    statusName = new Date()
-  }
+  statusName = new Date()
   const saveStatusBtn = document.getElementById('saveStatusBtn');
   disableBtn(saveStatusBtn)
   changeText(saveStatusBtn,"saving..")
@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', function () {
   setToRecentSetBtn.addEventListener('click', setToRecentSet);
   goToTheDetailBtn.addEventListener('click', openOptionPage);
   saveStatusBtn.addEventListener('click', saveStatus)
-  testBtn.addEventListener('click', ()=>{
-    alert("testalert")
+  testBtn.addEventListener('click', () => {
+    console.log('asada')
   })
 });
 
