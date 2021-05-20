@@ -49,7 +49,9 @@ class ChromeApis {
         });
     })
     static removeOneLocal = (target) => new Promise( resolve => {
-        
+        chrome.stroage.remove(target, () => {
+            resolve(true)
+        })
     })
     static createTab = (options) => {
         chrome.tabs.create(options)
@@ -189,6 +191,11 @@ const setToRecentSet = async (winId,cb) => {
         })
     })
     
+    return true
+}
+
+const removeOne = async () => {
+    await removeOneLocal()
     return true
 }
 
