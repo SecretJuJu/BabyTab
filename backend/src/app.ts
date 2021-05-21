@@ -3,7 +3,7 @@
 import express from "express"
 import errorhandler from 'strong-error-handler'
 
-import routes from './api/routes'
+import routes from './app/routes'
 
 const app = express()
 
