@@ -23,11 +23,11 @@ class ChromeApis {
             resolve(items);
         })
     })
-    static getFromStorage = (key) => {
+    static getFromStorage = (key) => new Promise(resolve =>{
         chrome.storage.local.get([key], function(result) {
-            console.log(result);
+            resolve(result);
         });
-    }
+    })
     static saveToStorage = (key,data) => new Promise ( resolve => {
         try { 
             chrome.storage.local.set({[key]: data}, () => {
@@ -177,17 +177,21 @@ const setRecentStatus = async (winId) => {
 }
 
 const setStatus = async (winId,statusKey,status=undefined) => {
+    console.log("win id : " + winId)
     const windows = await ChromeApis.getWindows()
     const ids = await pluck(windows,'id')
-    ids.slice(winId,1)
-    
+    console.log("removing sender's id")
+    console.log(ids)
+    await ids.slice(winId,1)
+    console.log(ids)
     ids.forEach(id => {
         chrome.windows.remove(id);
     })
     if (status === undefined) {
-        status = await getFromStorage(statusKey)
+        status = await ChromeApis.getFromStorage(statusKey)
+        status = status[statusKey]
     }
-    
+    console.log(status)
     status?.status?.forEach(status =>{
         // open first url when the window created
         Object.assign(status.options,{url : status.urls[0]})
@@ -224,7 +228,7 @@ const msgController = async (port) => {
         }
         
         if(msg.task === "setStatus") {
-            const result = await setStatus(msg.winId,statusKey) // statusKey : status_1231231
+            const result = await setStatus(msg.winId,msg.target) // statusKey : status_1231231
             response(port,result,msg.task)
         }
 

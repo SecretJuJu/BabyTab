@@ -43,7 +43,7 @@ window.onload = function(){
         let setListUlElement = document.querySelector('#setList>ul')
         setListUlElement.innerHTML=""
         
-        let keys = Object.keys(statusList)
+        let keys = (Object.keys(statusList)).reverse();
         const getTabCount = (status) => {
             let sum = 0
             for (let i=0;i<status.status.length; i++) {
@@ -51,6 +51,7 @@ window.onload = function(){
             }
             return sum
         }
+        
         for ( let i=0;i < keys.length; i++) {
             let status = statusList[keys[i]]
             const li = makeElement('li')
@@ -130,7 +131,9 @@ window.onload = function(){
                 toggleDisplayDetail(wrapper)
             }
             loadBtn.onclick = () => {
-                port.postMessage({task: "delete",target: keys[i]});
+                chrome.windows.getCurrent(function (win) {
+                    port.postMessage({task: "setStatus",winId:win.id,target: keys[i]});
+                })
             }
             deleteBtn.onclick = () => {
                 port.postMessage({task: "delete",target: keys[i]});
