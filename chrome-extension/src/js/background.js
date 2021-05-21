@@ -49,7 +49,7 @@ class ChromeApis {
         });
     })
     static removeOneLocal = (target) => new Promise( resolve => {
-        chrome.stroage.remove(target, () => {
+        chrome.storage.local.remove(target, () => {
             resolve(true)
         })
     })
@@ -165,13 +165,12 @@ const getRecentSet = async () => {
     return data[currentKey]
 }
 
-const setToRecentSet = async (winId,cb) => {
+const setRecentStatus = async (winId) => {
     // close windows without current window
     const recentSet = await getRecentSet()
     console.log("recent set : " + recentSet)
     if (!recentSet) {
-        cb(false)
-        return
+        return false
     }
     const windows = await ChromeApis.getWindows()
     const ids = await pluck(windows,'id')
@@ -194,8 +193,10 @@ const setToRecentSet = async (winId,cb) => {
     return true
 }
 
-const removeOne = async () => {
-    await removeOneLocal()
+const 
+
+const removeOne = async (target) => {
+    await ChromeApis.removeOneLocal(target)
     return true
 }
 
@@ -212,8 +213,13 @@ const msgController = async (port) => {
             response(port,result,msg.task)
         }
 
-        if(msg.task === "setToRecentSet") {
-            const result = await setToRecentSet(msg,winId)
+        if(msg.task === "setRecentStatus") {
+            const result = await setRecentStatus(msg.winId)
+            response(port,result,msg.task)
+        }
+        
+        if(msg.task === "setStatus") {
+            const result = await setStatus(msg.winId,statusKey) // statusKey : status_1231231
             response(port,result,msg.task)
         }
 
@@ -229,7 +235,8 @@ const msgController = async (port) => {
         }
 
         if (msg.task === "delete") {
-            console.log(msg)
+            const result = removeOne(msg.target)
+            response(port,result,msg.task,{target:msg.target})
         }
     })
 }

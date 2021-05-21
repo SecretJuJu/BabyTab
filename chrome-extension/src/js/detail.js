@@ -43,11 +43,7 @@ window.onload = function(){
         let setListUlElement = document.querySelector('#setList>ul')
         setListUlElement.innerHTML=""
         
-        let newStatus
-        console.log("==== status ====")
-        console.log(statusList)
         let keys = Object.keys(statusList)
-        console.log(keys)
         const getTabCount = (status) => {
             let sum = 0
             for (let i=0;i<status.status.length; i++) {
@@ -58,6 +54,7 @@ window.onload = function(){
         for ( let i=0;i < keys.length; i++) {
             let status = statusList[keys[i]]
             const li = makeElement('li')
+            li.id = keys[i]
             const wrapper = makeElement('div','wrapper')
             const tabCount = getTabCount(status)
             wrapper.innerHTML = `
@@ -120,6 +117,7 @@ window.onload = function(){
                 </div>
             `
             const summary = wrapper.querySelector('.summary')
+            const loadBtn = wrapper.querySelector('.buttons .load button')
             const deleteBtn = wrapper.querySelector('.buttons .delete button')
             summary.onclick = (e) => {
                 let wrapper = e.target
@@ -131,11 +129,14 @@ window.onload = function(){
                 }
                 toggleDisplayDetail(wrapper)
             }
+            loadBtn.onclick = () => {
+                port.postMessage({task: "delete",target: keys[i]});
+            }
             deleteBtn.onclick = () => {
                 port.postMessage({task: "delete",target: keys[i]});
             }
             let windowUl = wrapper.querySelector('.right .wrapper .windows')
-            console.log(windowUl)
+            
             for (let i=0; i < status.status.length; i++){
                 const windowLi = makeElement('li')
                 const h2 = makeElement('h2')
@@ -186,8 +187,11 @@ window.onload = function(){
             } 
         } else if (response?.task === "delete") {
             if (response.result) {
+                document.getElementById(response.data.target).remove()
                 alert("deleted!")
-            } 
+            } else {
+                alert("delete failed")
+            }
         }
     });
 }
