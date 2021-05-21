@@ -19,7 +19,7 @@ const changeText = (element,text) => {
 }
 
 let port = chrome.runtime.connect({name: "messaging"});
-const setToRecentSetBtn = document.getElementById('setToRecentSetBtn')
+const setRecentStatusBtn = document.getElementById('setRecentStatusBtn')
 const saveStatusBtn = document.getElementById('saveStatusBtn');
 const goToTheDetailBtn = document.getElementById("goToTheDetailBtn")
 const testBtn = document.getElementById('testBtn');

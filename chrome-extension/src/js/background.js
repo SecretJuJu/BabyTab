@@ -168,10 +168,15 @@ const getRecentSet = async () => {
 const setRecentStatus = async (winId) => {
     // close windows without current window
     const recentSet = await getRecentSet()
+    
     console.log("recent set : " + recentSet)
     if (!recentSet) {
         return false
     }
+    setStatus(winId,"",recentSet)
+}
+
+const setStatus = async (winId,statusKey,status=undefined) => {
     const windows = await ChromeApis.getWindows()
     const ids = await pluck(windows,'id')
     ids.slice(winId,1)
@@ -179,8 +184,11 @@ const setRecentStatus = async (winId) => {
     ids.forEach(id => {
         chrome.windows.remove(id);
     })
-    console.log(recentSet)
-    recentSet?.status?.forEach(status =>{
+    if (status === undefined) {
+        status = await getFromStorage(statusKey)
+    }
+    
+    status?.status?.forEach(status =>{
         // open first url when the window created
         Object.assign(status.options,{url : status.urls[0]})
         ChromeApis.createWindow(status.option,(win) => {
@@ -189,11 +197,8 @@ const setRecentStatus = async (winId) => {
             }
         })
     })
-    
     return true
 }
-
-const 
 
 const removeOne = async (target) => {
     await ChromeApis.removeOneLocal(target)
