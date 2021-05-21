@@ -51,7 +51,7 @@ const setRecentStatus = () => {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  setRecentStatus.addEventListener('click', setRecentStatus);
+  setRecentStatusBtn.addEventListener('click', setRecentStatus);
   goToTheDetailBtn.addEventListener('click', openOptionPage);
   saveStatusBtn.addEventListener('click', saveStatus)
   testBtn.addEventListener('click', () => {
