@@ -17,7 +17,12 @@
     "storage",
     "tabs"
   ],
-
+  "oauth2": {
+    "client_id": "48491606192-0it4l5uk0lb1669h0pev0t5otb4ece51.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive"
+    ]
+  },
   "icons": {
     "128": "icons/icon128.png",
     "48": "icons/icon48.png",
