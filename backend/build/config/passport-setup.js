@@ -33,6 +33,7 @@ const passportSetup = () => {
         callbackURL: GOOGLE_CLIENT_REDIRECT_URL
     }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
         const email = profile.emails[0].value;
+        console.log(email);
         return done(null, email);
     })));
 };

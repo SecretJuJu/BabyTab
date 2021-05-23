@@ -16,6 +16,7 @@ router.get("/google", passport_1.default.authenticate('google', {
     accessType: "offline"
 }));
 router.get("/google/callback", passport_1.default.authenticate('google', { session: false }), (req, res) => {
+    console.log();
     res.send("thanks for login");
 });
 router.get("/failed", (req, res) => {
