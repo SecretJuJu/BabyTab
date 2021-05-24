@@ -1,0 +1,228 @@
+* {
+    padding: 0;
+    margin : 0;
+    list-style: none;
+    text-decoration: none;
+    border-collapse: none;
+}
+
+body {
+    width: 100%;
+}
+
+.header {
+    width: 100%;
+    height: 50px;
+    border-bottom : 2px solid #e8e8e8;
+}
+.header .wrapper {
+    width: 90%;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.header .wrapper h1 {
+    display: flex;
+    align-items: center;
+}
+
+.header .wrapper .menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.header .wrapper .menu button {
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    padding: 0 15px 0;
+    height: 100%;
+}
+.header .wrapper .menu button:hover {
+    cursor:pointer;
+    background-color : rgba(0,0,0, 0.2);
+}
+
+.modal {
+    background-color: rgba(0,0,0, 0.8);
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content:center;
+    align-items: center;
+    z-index:1;
+}
+
+.login {
+    min-width: 400px;
+    min-height:300px;
+    background-color: #fff;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index:1000;
+    left: 50%;
+	top: 50%;
+    -ms-transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+
+
+.content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content .sets {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.content .sets ul {
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+.content .sets ul li>.wrapper {
+    padding:10px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.content .sets .wrapper .summary {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    height: 56px;
+    padding: 0 20px;
+}
+
+.content .sets .wrapper .summary:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.content .sets .wrapper .summary .topSide {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content .sets .wrapper .summary .topSide .left {
+    width: 300px;
+    font-size: small;
+    overflow: scroll;
+}
+.content .sets .wrapper .summary .topSide .right {
+    width: 240px;
+    text-align: right;
+}
+.content .sets .wrapper .summary .underSide {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.content .sets .detailInfo {
+    /* display: flex; */
+    display: none;
+    flex-direction: row;
+}
+
+.content .sets .detailInfo .left {
+    width: 40%;
+    height: 400px;
+    background: #aaa;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.content .sets .detailInfo .left .title {
+    width: 100%;
+    display: flex;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid;
+}
+
+.content .sets .detailInfo .left .title h1 {
+    font-size: larger;
+}
+
+.content .sets .detailInfo .left .tabCount,
+.content .sets .detailInfo .left .windowCount,
+.content .sets .detailInfo .left .createdAt{
+    font-size: medium;
+    text-align: center;
+    padding-top: 12px;
+}
+.content .sets .detailInfo .left .buttons {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom : 20px
+}
+
+.content .sets .detailInfo .left .buttons div {
+    height: 100%;
+}
+.content .sets .detailInfo .left .buttons div button {
+    padding: 0 20px;
+    height: 100%;
+}
+
+
+.content .sets .detailInfo .right {
+    width: 60%;
+    height: 400px;
+    background: #bbb;
+    overflow: scroll;
+}
+
+.content .sets .detailInfo .right .wrapper {
+    width: 100%;
+    padding-top: 20px;
+    display: flex;
+}
+
+.content .sets .detailInfo .right .wrapper>ul {
+    border: 1px solid #bbb;
+    padding:0 10px;
+    flex-direction: row;
+    display: flex;
+}
+
+.content .sets .detailInfo .right .wrapper>ul li>h2{
+    padding-left: 10px
+}
+
+.content .sets .detailInfo .right .wrapper>ul li .options{
+    padding-top : 20px;
+    padding-bottom: 20px;
+}
+
+.content .sets .detailInfo .right .wrapper .windows>li {
+    overflow: scroll;
+    max-width: 30%;
+    border-right: 2px solid #fff; 
+    padding-left: 20px;
+    height: 50%;
+    border-bottom: 1px solid;
+}

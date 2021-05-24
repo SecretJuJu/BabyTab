@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "version": "1.0.0",
+
+  "name": "BabyTab",
+  "description": "A simple hello world!",
+  "background": {
+    "scripts": ["src/js/background.js"],
+    "persistent": false
+  },
+  "options_page": "src/html/detail.html",
+  "browser_action": {
+    "default_popup": "src/html/popUp.html"
+  },
+  "permissions": [
+    "identity",
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "oauth2": {
+    "client_id": "48491606192-0it4l5uk0lb1669h0pev0t5otb4ece51.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/",
+      "https://accounts.google.com/",
+      "https://*.googleusercontent.com/",
+      "https://*.chromiumapp.org/*",
+      "https://accounts.google.com/o/oauth2/v2/auth"
+    ]
+  },
+  "icons": {
+    "128": "icons/icon128.png",
+    "48": "icons/icon48.png",
+    "16": "icons/icon16.png"
+  }
+}

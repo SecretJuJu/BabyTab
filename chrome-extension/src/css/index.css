@@ -1,0 +1,16 @@
+body {
+  min-width: 300px;
+  min-height: 300px;
+  background-color: transparent;
+}
+.controllePannel {
+  width : 90%;
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+}
+
+.controllePannel article {
+  height : 50px;
+  width : 100%;
+}
