@@ -13,6 +13,7 @@
     "default_popup": "src/html/popUp.html"
   },
   "permissions": [
+    "identity",
     "activeTab",
     "storage",
     "tabs"
@@ -20,7 +21,11 @@
   "oauth2": {
     "client_id": "48491606192-0it4l5uk0lb1669h0pev0t5otb4ece51.apps.googleusercontent.com",
     "scopes": [
-      "https://www.googleapis.com/auth/drive"
+      "https://www.googleapis.com/",
+      "https://accounts.google.com/",
+      "https://*.googleusercontent.com/",
+      "https://*.chromiumapp.org/*",
+      "https://accounts.google.com/o/oauth2/v2/auth"
     ]
   },
   "icons": {

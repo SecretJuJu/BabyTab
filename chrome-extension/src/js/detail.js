@@ -7,14 +7,22 @@ window.onload = function(){
     let loginForm = document.querySelector(".login")
     let loginBtn = document.querySelector("#loginBtn")
     let deteletAllBtn = document.getElementById("deteletAllBtn")
+    let googleLoginBtn = document.getElementById("googleLoginBtn")
     const modalHandler = () => {
         modal.style.display = "none"
         loginForm.style.display = "none"
     }
-    const loginBtnHandler = () => {
-        modal.style.display = "flex"
-        loginForm.style.display = "flex"
+    // const loginBtnHandler = () => {
+    //     modal.style.display = "flex"
+    //     loginForm.style.display = "flex"
+    // }
+
+    const googleLoginHandler = () => {
+        
+        port.postMessage({task:"getGoogleToken"})
+        
     }
+
     const toggleDisplayDetail = (wrapper) => {
         // toggle detail info 
         const detailInfo = wrapper.querySelector(".detailInfo")
@@ -175,9 +183,11 @@ window.onload = function(){
     }
     
     
-    modal.addEventListener("click", ()=>modalHandler())
-    deteletAllBtn.addEventListener("click", ()=> requestDeleteAll())
-    loginBtn.addEventListener("click",()=>loginBtnHandler())
+    
+    modal?.addEventListener("click", ()=>modalHandler())
+    deteletAllBtn?.addEventListener("click", ()=> requestDeleteAll())
+    // loginBtn?.addEventListener("click",()=>loginBtnHandler()) // 기능 추가 대기..
+    googleLoginBtn?.addEventListener("click",()=>googleLoginHandler())
     requestGetStatusList()
 
     port.onMessage.addListener( async (response) => {

@@ -35,9 +35,10 @@ body {
 }
 
 .header .wrapper .menu button {
-    background-color : #fff;
-    border : 1px solid #e8e8e8;
-    padding : 0 15px 0;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    padding: 0 15px 0;
+    height: 100%;
 }
 .header .wrapper .menu button:hover {
     cursor:pointer;
